@@ -1,0 +1,17 @@
+#!/bin/sh
+# api-gate PATH wrapper — Git Bash 版（bash 不解析 .cmd，必须有这个无扩展名文件）
+# 命中闸门 → exit 2 + 提示；否则转发真命令
+# 可覆盖的环境变量：API_GATE_HOME（项目目录）、API_GATE_LARK（真实 lark-cli 绝对路径）
+SELF_DIR=$(cd "$(dirname "$0")" 2>/dev/null && pwd)
+GATE_HOME="${API_GATE_HOME:-${SELF_DIR:-/c/D/opt/api-gate}}"
+[ -f "$GATE_HOME/gate.mjs" ] || GATE_HOME="/c/D/opt/api-gate"
+# node.exe 是 Windows 程序，不认 /c/... 路径 —— 交给 cygpath 转成 C:/... 风格
+GATE_HOME_W=$(cygpath -m "$GATE_HOME" 2>/dev/null || echo "C:/D/opt/api-gate")
+REAL="${API_GATE_LARK:-$HOME/AppData/Roaming/npm/lark-cli}"
+reason=$(node "$GATE_HOME_W/gate.mjs" --check "${CTI_BOT:-cli}|lark-cli $*" 2>&1)
+rc=$?
+if [ "$rc" -eq 2 ]; then
+  echo "$reason" >&2
+  exit 2
+fi
+exec "$REAL" "$@"

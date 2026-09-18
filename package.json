@@ -1,0 +1,28 @@
+{
+  "name": "api-gate",
+  "version": "0.1.0",
+  "description": "A gate for AI agents: block outbound GitHub / Lark operations until the agent has consulted the required playbook.",
+  "type": "module",
+  "bin": {
+    "api-gate": "gate.mjs"
+  },
+  "files": [
+    "gate.mjs",
+    "bin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ai-agent",
+    "guardrail",
+    "hook",
+    "pretooluse",
+    "github",
+    "lark",
+    "feishu"
+  ]
+}

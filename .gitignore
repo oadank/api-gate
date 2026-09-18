@@ -1,0 +1,17 @@
+# 本机运行时状态与快照 —— 不进仓库
+_local/
+env-backup-*.txt
+sys-path-backup-*.txt
+*.log
+*.log.*
+
+# 依赖与缓存
+node_modules/
+__pycache__/
+*.py[cod]
+
+# 编辑器
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
