@@ -195,6 +195,17 @@ if (argv[0] === '--check') {
   const cmd = sepIdx > 0 ? rawArg.slice(sepIdx + 1) : rawArg
   try {
     const reason = checkCommandLine(cmd, bot)
+    // 留痕（2026-09-25 加）：PATH 包装层以前拦了人不吭声，死没死只能猜。
+    // 现在每次 --check 都记一行，验证闸门是否真的在链路上，只认这个文件不认转述。
+    try {
+      fs.appendFileSync(
+        path.join(os.tmpdir(), 'api-gate-calls.log'),
+        `${new Date().toISOString()} ev=PATH-CHECK bot=${bot} result=${reason ? 'DENY' : 'pass'} cmd=${cmd.slice(0, 120)}\n`,
+        'utf8',
+      )
+    } catch {
+      /* 留痕失败不影响判定 */
+    }
     if (reason) {
       process.stderr.write(reason + '\n')
       process.exit(2)
